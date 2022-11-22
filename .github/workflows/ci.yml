@@ -3,40 +3,38 @@ on:
   workflow_dispatch:
 jobs:
   terraform:
+        name: VPC peering
         runs-on: ubuntu-latest
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-2
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
         steps:
-            - uses: actions/checkout@v2
-            - uses: hashicorp/setup-terraform@v1
+            - name: Checkout the code
+              uses: actions/checkout@v2
+
+            - name: set the terraform environment
+              uses: hashicorp/setup-terraform@v1
               with:
                 terraform_wrapper: false
-            - name: Terraform Init
+
+            - name: Terraform Init - Initialization of terraform
               id: init
               run: terraform init
             
-            - name: Terraform Validate
+            - name: Terraform Validate -  Validation of credentials
               id: validate
               run: terraform validate
 
-            - name: Terraform Plan
+            - name: Terraform Plan - Validation of the changes
               id: plan
               run: terraform plan
               continue-on-error: true
 
-            - name: Terraform Plan Status
+            - name: Terraform Plan Status - run if terraform plan is failed
               if: steps.plan.outcome == 'failure'
               run: exit 1
-
-
-
-
-
-
-
-
+              
 
 
 
