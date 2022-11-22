@@ -40,7 +40,7 @@ jobs:
               if: steps.plan.outcome == 'failure'
               run: exit 1
             - name: terraform apply - to create the resource 
-              run: terraform apply
+              run: terraform apply -auto-approve
 
 
 
