@@ -30,11 +30,15 @@ jobs:
               id: plan
               run: terraform plan
               continue-on-error: true
+            - name: Terraform Plan Status - run if terraform plan is failed
+              if: steps.plan.outcome == 'success'
+              run: |
+                echo "You terraform plan is success"
 
             - name: Terraform Plan Status - run if terraform plan is failed
               if: steps.plan.outcome == 'failure'
               run: exit 1
-              
+
 
 
 
